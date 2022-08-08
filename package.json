@@ -7,7 +7,8 @@
 		"package": "svelte-kit package",
 		"preview": "vite preview",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
-		"format": "prettier --write --plugin-search-dir=. ."
+		"format": "prettier --write --plugin-search-dir=. .",
+		"deploy": "npm run build && firebase deploy"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "1.0.0-next.39",
