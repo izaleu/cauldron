@@ -4,14 +4,15 @@
 </script>
 
 <div class="layout">
-    <MenuBar />
+	<MenuBar />
 	<slot />
 	<Footer />
 </div>
 
 <style>
 	.layout {
+		min-height: 100vh;
 		display: grid;
-		grid: 24px calc(100vh - 48px) 24px/ auto;
+		grid-template-rows: auto 1fr auto;
 	}
 </style>
