@@ -1,69 +1,37 @@
 <script>
-	// auth
-	import { checkSignIn, getCurrentUser, getFirestoreDB, makeFirebaseApp } from '../firebase';
-	import { getRecipes, initApi } from '../api/api';
-
-	// init
-	const app = makeFirebaseApp();
-	initApi(getFirestoreDB(app));
-
-	// auth
-	import { googleSignIn, googleSignOut } from '../googleAuth';
-
-	function updateLogin() {
-		checkSignIn().then((result) => {
-			isLoggedIn = result;
-		});
-	}
-
-	async function tryLogin() {
-		googleSignIn().then(() => updateLogin());
-	}
-
-	async function logout() {
-		googleSignOut().then(() => updateLogin());
-	}
-
-	let isLoggedIn = !!getCurrentUser();
-
-	updateLogin();
+	let upcomingMeals = [];
+	let savedRecipes = []; // empty if logged in?
 </script>
 
 <svelte:head>
-  <title>Cauldron Home</title>
+	<title>Cauldron Home</title>
 </svelte:head>
 
 <div>
 	<h1>Welcome to Cauldron</h1>
-	<button on:click={getRecipes}>Get Recipes</button>
-
-	{#if isLoggedIn}
-		<p>Logged in as: {getCurrentUser().displayName}</p>
-		<button on:click={logout}>Log Out</button>
-	{:else}
-		<button on:click={tryLogin}>Log In</button>
-	{/if}
-
-	<h2>Recipe list</h2>
-	<ul>
-		{#await getRecipes()}
-			<!-- promise is pending -->
-			<p>waiting for the promise to resolve...</p>
-		{:then recipeList}
-			<!-- promise was fulfilled -->
-			{#each recipeList as recipe}
-				<li>
-					<h3>{recipe.displayName}</h3>
-					<p>Ingredients: {recipe.ingredients.length}</p>
-				</li>
+	<p>An app to make meal-planning painless.</p>
+	<div class="two-col">
+		<div>
+			<h2>Your Next X Meals</h2>
+			<a href="/schedule">Create a Meal Plan</a>
+			{#each upcomingMeals as meal}
+				<li>{meal?.displayName}</li>
 			{/each}
-		{:catch error}
-			<!-- promise was rejected -->
-			<p>Something went wrong: {error.message}</p>
-		{/await}
-	</ul>
+		</div>
+		<div>
+			<h2>Saved Recipes</h2>
+			<ul>
+				{#each savedRecipes as recipe}
+					<li>{recipe?.displayName}</li>
+				{/each}
+			</ul>
+		</div>
+	</div>
 </div>
 
 <style>
-
+	.two-col {
+		display: grid;
+		grid-template-columns: auto auto;
+	}
 </style>
