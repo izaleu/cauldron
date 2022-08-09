@@ -1,6 +1,9 @@
 <script>
-	let upcomingMeals = [];
-	let savedRecipes = []; // empty if logged in?
+	import BrowseRecipes from '../components/recipes/BrowseRecipes.svelte';
+	import SavedRecipes from '../components/recipes/SavedRecipes.svelte';
+	import UpcomingMeals from '../components/schedule/UpcomingMeals.svelte';
+
+	let isSignedIn = false; // TODO: get from store
 </script>
 
 <svelte:head>
@@ -11,21 +14,12 @@
 	<h1>Welcome to Cauldron</h1>
 	<p>An app to make meal-planning painless.</p>
 	<div class="two-col">
-		<div>
-			<h2>Your Next X Meals</h2>
-			<a href="/schedule">Create a Meal Plan</a>
-			{#each upcomingMeals as meal}
-				<li>{meal?.displayName}</li>
-			{/each}
-		</div>
-		<div>
-			<h2>Saved Recipes</h2>
-			<ul>
-				{#each savedRecipes as recipe}
-					<li>{recipe?.displayName}</li>
-				{/each}
-			</ul>
-		</div>
+		{#if isSignedIn === true}
+			<UpcomingMeals />
+			<SavedRecipes />
+		{:else}
+			<BrowseRecipes />
+		{/if}
 	</div>
 </div>
 

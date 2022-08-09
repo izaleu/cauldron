@@ -1,8 +1,7 @@
-import { 
-    getAuth, 
+import {
+    getAuth,
     signInWithPopup,
-    signOut,
-    GoogleAuthProvider 
+    GoogleAuthProvider
 } from "firebase/auth";
 
 export function googleSignIn() {
@@ -12,8 +11,8 @@ export function googleSignIn() {
     return signInWithPopup(auth, provider)
         .then((result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
+            // const credential = GoogleAuthProvider.credentialFromResult(result);
+            // const token = credential.accessToken;
             // The signed-in user info.
             return result.user;
         }).catch((error) => {
@@ -21,19 +20,11 @@ export function googleSignIn() {
             const errorCode = error.code;
             const errorMessage = error.message;
             // The email of the user's account used.
-            const email = error.customData.email;
+            // const email = error.customData.email;
             // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
+            // const credential = GoogleAuthProvider.credentialFromError(error);
             // ...
-            return { errorCode, errorMessage }
+            console.error('Encountered error while attempting google sign in:', errorMessage, 'Error code:', errorCode);
+            return null;
         });
-}
-
-export function googleSignOut () {
-    const auth = getAuth();
-    return signOut(auth).then(result => {
-        // console.log('Signed out?', result);
-    }).catch(error => {
-        // console.error("Encountered error while trying to sign out:", error)
-    });
 }

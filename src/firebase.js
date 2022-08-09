@@ -1,11 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-
 import { getAnalytics } from "firebase/analytics";
-
 import { getFirestore } from 'firebase/firestore';
-
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -33,23 +29,3 @@ export function getGoogleAnalytics(app) {
 export function getFirestoreDB(app){
     return getFirestore(app);
 }
-
-// auth
-export function getCurrentUser() {
-    return getAuth().currentUser;
-}
-
-export async function checkSignIn () {
-    return new Promise((resolve, reject) => {
-      const auth = getAuth();
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        unsubscribe();
-        if (user) {
-          console.log(user.uid)
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      });
-    });
-  }

@@ -1,17 +1,21 @@
 <script>
+	import { isLoggedIn } from '../stores/users';
 	const isProd = process.env.NODE_ENV !== 'development';
-	const isSignedIn = false; // TODO: read from store
 </script>
 
 <div class="menu" class:isProd>
 	<div class="logoLink">
-        <a href="/"> {isProd ? 'Logo goes here' : 'cauldron (dev mode)'}</a>
-    </div>
+		<a href="/"> {isProd ? 'Logo goes here' : 'cauldron (dev mode)'}</a>
+	</div>
 	<div class="navBar">
 		<a class="navLink" href="/">Home</a>
 		<a class="navLink" href="/schedule">Schedule</a>
 		<a class="navLink" href="/recipes">Recipes</a>
-		<a class="navLink" href="/login">{isSignedIn ? 'Sign Out' : 'Sign In'}</a>
+		{#if $isLoggedIn}
+			<a class="navLink" href="/logout">Log Out</a>
+		{:else}
+			<a class="navLink" href="/login">Log In</a>
+		{/if}
 	</div>
 </div>
 

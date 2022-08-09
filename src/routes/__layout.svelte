@@ -1,12 +1,15 @@
 <script>
-	// auth
+	// init
 	import { getFirestoreDB, makeFirebaseApp } from '../firebase';
 	import { initApi } from '../api/api';
+	import { initAuth } from '../auth/firebase';
+	import { user, isLoggedIn } from '../stores/users';
 
-	// init
 	const app = makeFirebaseApp();
 	initApi(getFirestoreDB(app));
+    initAuth(user);
 
+	// layout
 	import Footer from '../components/Footer.svelte';
 	import MenuBar from '../components/MenuBar.svelte';
 </script>
