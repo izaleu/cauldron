@@ -1,6 +1,17 @@
 <script>
 	import { isLoggedIn } from '../stores/users';
+	import { getCurrentUser } from '../api/api';
+	import { user as userStore } from '../stores/users';
+
 	const isProd = process.env.NODE_ENV !== 'development';
+
+	let userRole;
+
+	userStore.subscribe(() => getCurrentUser().then(result => {
+		userRole = result?.role;
+	}));
+	// subscribe to user store update?
+	
 </script>
 
 <div class="menu" class:isProd>
@@ -11,6 +22,9 @@
 		<a class="navLink" href="/">Home</a>
 		<a class="navLink" href="/schedule">Schedule</a>
 		<a class="navLink" href="/recipes">Recipes</a>
+		{#if userRole === 'admin'}
+		<a class="navLink" href="/admin">Admin</a>
+		{/if}
 		{#if $isLoggedIn}
 			<a class="navLink" href="/logout">Log Out</a>
 		{:else}

@@ -3,11 +3,10 @@
 	import { getFirestoreDB, makeFirebaseApp } from '../firebase';
 	import { initApi } from '../api/api';
 	import { initAuth } from '../auth/firebase';
-	import { user, isLoggedIn } from '../stores/users';
 
 	const app = makeFirebaseApp();
 	initApi(getFirestoreDB(app));
-    initAuth(user);
+	initAuth(app);
 
 	// layout
 	import Footer from '../components/Footer.svelte';

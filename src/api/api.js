@@ -1,22 +1,28 @@
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { get as getStoreValue } from 'svelte/store';
+import { user as userStore } from '../stores/users';
 
+// init
 let db;
 
-function initApi(database) {
+export function initApi(database) {
     db = database;
 }
 
 // API calls
-
-async function getRecipes() {
+export async function getRecipes() {
     return getAll('recipes');
 }
 
-async function getUser(userId) {
-    return get('users', userId);
+export async function getCurrentUser() {
+    let user = getStoreValue(userStore);
+    return (user?.uid) ? getUser(user.uid) : null;
 }
 
 // internal
+async function getUser(userId) {
+    return get('users', userId);
+}
 
 async function getAll(col) {
     const snap = await getDocs(collection(db, col));
@@ -38,10 +44,4 @@ async function get(col, item) {
       console.log("No such document!");
       return null;
     }
-}
-
-
-export {
-    getRecipes,
-    initApi
 }

@@ -1,10 +1,12 @@
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { get as getStoreValue } from 'svelte/store';
+import { user as userStore } from '../stores/users';
+import { auth as authStore } from '../stores/auth';
 
-export function initAuth (userStore) {
-  const auth = getAuth();
+export function initAuth(app) {
+  authStore.set(getAuth(app));
 
-  onAuthStateChanged(auth, (user) => {
-    // console.log("Auth state changed", user);
+  onAuthStateChanged(getStoreValue(authStore), (user) => {
     if (user) {
       userStore.set(user);
     } else {
@@ -13,11 +15,10 @@ export function initAuth (userStore) {
   });
 }
 
-export async function logout () {
-    const auth = getAuth();
-    return signOut(auth).then(() => {
-        // do nothing
-    }).catch(error => {
-        console.error("Encountered error while trying to sign out:", error);
-    });
+export async function logout() {
+  return signOut(getStoreValue(authStore)).then(() => {
+    // do nothing
+  }).catch(error => {
+    console.error("Encountered error while trying to sign out:", error);
+  });
 }
