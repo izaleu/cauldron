@@ -5,7 +5,9 @@
 
 <div class="layout">
 	<MenuBar />
-	<slot />
+	<main>
+		<slot />
+	</main>
 	<Footer />
 </div>
 

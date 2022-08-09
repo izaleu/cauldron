@@ -1,3 +1,7 @@
-<h1>Login Page</h1>
+<svelte:head>
+  <title>Cauldron: Sign In</title>
+</svelte:head>
 
-TBD
+<h1>Sign-in Page</h1>
+
+<p>Sign in to save your schedule, favorite recipes, shopping list, etc.</p>

@@ -29,38 +29,41 @@
 	updateLogin();
 </script>
 
-<main>
-		<h1>Welcome to Cauldron</h1>
-		<button on:click={getRecipes}>Get Recipes</button>
+<svelte:head>
+  <title>Cauldron Home</title>
+</svelte:head>
 
-		{#if isLoggedIn}
-			<p>Logged in as: {getCurrentUser().displayName}</p>
-			<button on:click={logout}>Log Out</button>
-		{:else}
-			<button on:click={tryLogin}>Log In</button>
-		{/if}
+<div>
+	<h1>Welcome to Cauldron</h1>
+	<button on:click={getRecipes}>Get Recipes</button>
 
-		<h2>Recipe list</h2>
-		<ul>
-			{#await getRecipes()}
-				<!-- promise is pending -->
-				<p>waiting for the promise to resolve...</p>
-			{:then recipeList}
-				<!-- promise was fulfilled -->
-				{#each recipeList as recipe}
-					<li>
-						<h3>{recipe.displayName}</h3>
-						<p>Ingredients: {recipe.ingredients.length}</p>
-					</li>
-				{/each}
-			{:catch error}
-				<!-- promise was rejected -->
-				<p>Something went wrong: {error.message}</p>
-			{/await}
-		</ul>
-</main>
+	{#if isLoggedIn}
+		<p>Logged in as: {getCurrentUser().displayName}</p>
+		<button on:click={logout}>Log Out</button>
+	{:else}
+		<button on:click={tryLogin}>Log In</button>
+	{/if}
+
+	<h2>Recipe list</h2>
+	<ul>
+		{#await getRecipes()}
+			<!-- promise is pending -->
+			<p>waiting for the promise to resolve...</p>
+		{:then recipeList}
+			<!-- promise was fulfilled -->
+			{#each recipeList as recipe}
+				<li>
+					<h3>{recipe.displayName}</h3>
+					<p>Ingredients: {recipe.ingredients.length}</p>
+				</li>
+			{/each}
+		{:catch error}
+			<!-- promise was rejected -->
+			<p>Something went wrong: {error.message}</p>
+		{/await}
+	</ul>
+</div>
+
 <style>
-    /* main {
-        height: 100vh
-    } */
+
 </style>
