@@ -14,6 +14,10 @@ export async function getRecipes() {
     return getAll('recipes');
 }
 
+export async function getRecipe(id) {
+    return get('recipes', id);
+}
+
 export async function getCurrentUser() {
     let user = getStoreValue(userStore);
     return (user?.uid) ? getUser(user.uid) : null;
@@ -33,15 +37,22 @@ async function getAll(col) {
     return results;
 }
 
+// TODO: Add catch 
 async function get(col, item) {
+    const isProd = process.env.NODE_ENV !== 'development';
+
     const docRef = doc(db, col, item);
     const docSnap = await getDoc(docRef);
-    
+
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      return docSnap.data();
+        if (!isProd) console.log("Document data:", docSnap.data());
+        return docSnap.data();
     } else {
-      console.log("No such document!");
-      return null;
+        if (!isProd) {
+            console.error("No such document!", docSnap);
+        } else {
+            console.error("Failed to fetch resource, errorCode: 404");
+        }
+        return null;
     }
 }

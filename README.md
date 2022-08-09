@@ -14,3 +14,9 @@
 - [ ] admin data entry area
 - [ ] guest user experience
 - [ ] offline mode?
+- [ ] business logic
+    - [ ] ingredients
+    - [ ] recipes
+    - [ ] meals
+    - [ ] schedule
+    - [ ] shopping list

@@ -3,6 +3,7 @@ import { get as getStoreValue } from 'svelte/store';
 import { user as userStore } from '../stores/users';
 import { auth as authStore } from '../stores/auth';
 
+// TODO: replace authStore with context?
 export function initAuth(app) {
   authStore.set(getAuth(app));
 
