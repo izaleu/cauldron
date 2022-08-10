@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { get as getStoreValue } from 'svelte/store';
 import { user as userStore } from '../stores/users';
 
@@ -16,6 +16,15 @@ export async function getRecipes() {
 
 export async function getRecipe(id) {
     return get('recipes', id);
+}
+
+export async function getSavedRecipes() {
+    const user = await getCurrentUser();
+    let requests = [];
+    user.savedRecipes.forEach(recipeDoc => {
+        requests.push(getDoc(recipeDoc).then(docResult => docResult.data()));
+    });
+    return Promise.all(requests).then(dataResult => dataResult);
 }
 
 export async function getCurrentUser() {
@@ -45,13 +54,13 @@ async function get(col, item) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        if (!isProd) console.log("Document data:", docSnap.data());
+        if (!isProd) console.log("[DEV] Document data:", docSnap.data());
         return docSnap.data();
     } else {
         if (!isProd) {
             console.error("No such document!", docSnap);
         } else {
-            console.error("Failed to fetch resource, errorCode: 404");
+            console.error("[DEV] Failed to fetch resource, errorCode: 404");
         }
         return null;
     }

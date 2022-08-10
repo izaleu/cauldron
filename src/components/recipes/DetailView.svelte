@@ -10,7 +10,7 @@
     <a href="/recipes">{"<<< Go Back"}</a>
 </div>
 
-<h1>{displayName}</h1>
+<h1>{displayName} <button>Add to Saved</button></h1>
 <!-- tag list-->
 <p>
 	{#each tags as tag}

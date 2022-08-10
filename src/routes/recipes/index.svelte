@@ -1,8 +1,6 @@
 <script>
-  import BrowseRecipes from "../../components/recipes/BrowseRecipes.svelte";
-  import SavedRecipes from "../../components/recipes/SavedRecipes.svelte";
-
-  let isSignedIn = false; // TODO: get from store
+	import BrowseRecipes from '../../components/recipes/BrowseRecipes.svelte';
+	import SavedRecipes from '../../components/recipes/SavedRecipes.svelte';
 </script>
 
 <svelte:head>
@@ -11,10 +9,8 @@
 
 <h1>Recipes</h1>
 <div class="two-col">
-  <BrowseRecipes/>
-  {#if isSignedIn === true}
-    <SavedRecipes/>
-  {/if}
+	<BrowseRecipes />
+  <SavedRecipes />
 </div>
 
 <style>
