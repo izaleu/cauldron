@@ -15,7 +15,12 @@ export async function getRecipes() {
 }
 
 export async function getRecipe(id) {
-    return get('recipes', id);
+    return get('recipes', id).then(async result => {
+        result.tags = await Promise.all(
+            result.tags.map(tagDoc => getDoc(tagDoc).then(tagResult => tagResult.data().displayName))
+        );
+        return result;
+    });
 }
 
 export async function getSavedRecipes() {
