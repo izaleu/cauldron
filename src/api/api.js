@@ -1,15 +1,39 @@
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    setDoc,
+    query,
+    where
+} from "firebase/firestore";
+
 import { get as getStoreValue } from 'svelte/store';
 import { user as userStore } from '../stores/users';
 
 // init
-let db;
+let db; // TODO: replace w/context
 
 export function initApi(database) {
     db = database;
 }
 
 // API calls
+
+// ingredients
+export async function addIngredient(displayName, tags) {
+    const ingredientRef = collection(db, "ingredients");
+    let tagDocs = await Promise.all(tags.map(async tag => {
+        return doc(db, 'tags', tag);
+    }));
+
+    await setDoc(doc(ingredientRef, displayName.toLowerCase()), {
+        displayName,
+        tags: tagDocs
+    })
+}
+
+// recipes
 export async function getRecipes() {
     return getAll('recipes');
 }
@@ -25,7 +49,7 @@ export async function getRecipe(id) {
                     ingredient: ingredientDoc.data()
                 }
             }
-        )]);
+            )]);
 
         return {
             ...recipe,
@@ -44,6 +68,7 @@ export async function getSavedRecipes() {
     return Promise.all(requests).then(dataResult => dataResult);
 }
 
+// users
 export async function getCurrentUser() {
     let user = getStoreValue(userStore);
     return (user?.uid) ? getUser(user.uid) : null;
