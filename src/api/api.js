@@ -15,11 +15,23 @@ export async function getRecipes() {
 }
 
 export async function getRecipe(id) {
-    return get('recipes', id).then(async result => {
-        result.tags = await Promise.all(
-            result.tags.map(tagDoc => getDoc(tagDoc).then(tagResult => tagResult.data().displayName))
-        );
-        return result;
+    return get('recipes', id).then(async recipe => {
+        const results = await Promise.all([
+            ...recipe.tags.map(tagDoc => getDoc(tagDoc).then(tagResult => tagResult.data().displayName)),
+            ...recipe.ingredients.map(async ingredient => {
+                const ingredientDoc = await getDoc(ingredient.ingredient).then(ingredientResult => ingredientResult);
+                return {
+                    ...ingredient,
+                    ingredient: ingredientDoc.data()
+                }
+            }
+        )]);
+
+        return {
+            ...recipe,
+            tags: results.splice(0, recipe.tags.length),
+            ingredients: results
+        };
     });
 }
 

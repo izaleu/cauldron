@@ -1,16 +1,31 @@
 <script>
+	import { isLoggedIn } from '../../stores/users';
+
 	export let ingredients = [],
 		displayName = '',
 		instructions = [],
 		tags = [],
 		serves = 1;
+
+	let servingAdjustment = 1;
+
+	function adjustServing(amount) {
+		servingAdjustment += amount/serves;
+		servingAdjustment = Math.max(servingAdjustment, 1);
+	}
 </script>
 
 <div class="returnLink">
-    <a href="/recipes">{"<<< Go Back"}</a>
+	<a href="/recipes">{'<<< Go Back'}</a>
 </div>
 
-<h1>{displayName} <button>Add to Saved</button></h1>
+<h1>
+	{displayName}
+	{#if $isLoggedIn}
+		<button>Add to Saved</button>
+		<button>Add to Schedule</button>
+	{/if}
+</h1>
 <!-- tag list-->
 <p>
 	{#each tags as tag}
@@ -20,9 +35,9 @@
 <!-- end tags -->
 <!-- portions -->
 <div class="portions">
-	<p>Serves: {serves}</p>
-	<button>Add portion</button>
-	<button>Subtract portion</button>
+	<p>Serves: {serves * servingAdjustment}</p>
+	<button on:click={() => adjustServing(1)}>Add serving</button>
+	<button on:click={() => adjustServing(-1)} disabled={serves <= 1}>Subtract a serving</button>
 </div>
 <!-- end portions -->
 <div>
@@ -31,7 +46,7 @@
 		{#each ingredients as ingredient}
 			<li>
 				<div>
-					{ingredient.quantity}
+					{ingredient.quantity * servingAdjustment}
 					{ingredient.measure}
 					{ingredient?.ingredient?.displayName}
 				</div>
@@ -46,9 +61,6 @@
 			<li>{instruction}</li>
 		{/each}
 	</ol>
-</div>
-<div>
-	<h2>Nutrition Info</h2>
 </div>
 
 <style>
@@ -65,7 +77,7 @@
 		max-height: 24px;
 		align-items: center;
 	}
-    .returnLink {
-        margin-top: 12px;
-    }
+	.returnLink {
+		margin-top: 12px;
+	}
 </style>
